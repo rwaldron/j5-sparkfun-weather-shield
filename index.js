@@ -38,7 +38,8 @@ module.exports = function(five) {
 
       if (opts.variant === "ARDUINO") {
         ALSPT19 = new five.Light({
-          controller: "ALSPT19"
+          controller: "ALSPT19",
+          pin: "A1",
         });
       }
 

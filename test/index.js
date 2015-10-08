@@ -90,7 +90,8 @@ exports["Weather"] = {
       controller: "MPL3115A2"
     });
     test.deepEqual(this.Light.lastCall.args[0], {
-      controller: "ALSPT19"
+      controller: "ALSPT19",
+      pin: "A1",
     });
 
     ownProps.forEach(function(own) {
@@ -115,7 +116,8 @@ exports["Weather"] = {
       controller: "MPL3115A2"
     });
     test.deepEqual(this.Light.lastCall.args[0], {
-      controller: "ALSPT19"
+      controller: "ALSPT19",
+      pin: "A1",
     });
 
     ownProps.forEach(function(own) {
