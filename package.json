@@ -1,6 +1,6 @@
 {
   "name": "j5-sparkfun-weather-shield",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "SparkFun Weather Shield plugin for Johnny-Five",
   "main": "index.js",
   "scripts": {
