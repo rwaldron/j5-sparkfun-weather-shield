@@ -10,9 +10,12 @@ For use with [Johnny-Five](https://github.com/rwaldron/johnny-five).
   + Humidity/Temperature Sensor - HTU21D
   + Barometric Pressure - MPL3115A2
   + Light Sensor - ALS-PT19
+  ![](https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-01.jpg)
+  
 - [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630)
   + Humidity/Temperature Sensor - HTU21D
   + Barometric Pressure - MPL3115A2
+  ![](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-01a.jpg)
 
 ## API & Documentation
 
