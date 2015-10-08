@@ -27,6 +27,48 @@ npm install johnny-five particle-io j5-sparkfun-weather-shield
 
 The `Weather` class constructs objects that represent the built-in components of the shield.
 
+- Shorthand Initialization, defaults "data" to 25ms intervals
+  ```js
+  var weather = new Weather("ARDUINO");
+
+  ...or...
+
+  var weather = new Weather("PHOTON");
+  ```
+
+- Explicit Initialization, defaults "data" to 25ms intervals
+  ```js
+  var weather = new Weather({
+    variant: "ARDUINO",
+    freq: 200
+  });
+
+  ...or...
+  
+  var weather = new Weather({
+    variant: "PHOTON",
+    freq: 200
+  });
+  ```
+
+- Explicit Initialization, specify "data" to 200ms intervals
+  ```js
+  var weather = new Weather({
+    variant: "ARDUINO",
+    freq: 200
+  });
+
+  ...or...
+
+  var weather = new Weather({
+    variant: "PHOTON",
+    freq: 200
+  });
+  ```
+
+
+
+
 #### Parameters
 
 | Property   | Type      | Value(s)/Description      | Default | Required |
@@ -50,13 +92,14 @@ board.on("ready", function() {
   });
 
   weather.on("data", function() {
-    console.log("  celsius: ", this.celsius);
-    console.log("  fahrenheit: ", this.fahrenheit);
-    console.log("  kelvin: ", this.kelvin);
-    console.log("  pressure: ", this.pressure);
-    console.log("  feet: ", this.feet);
-    console.log("  meters: ", this.meters);
-    console.log("  relativeHumidity: ", this.relativeHumidity);
+    console.log("  celsius: %d°C", this.celsius);
+    console.log("  fahrenheit: %d°F", this.fahrenheit);
+    console.log("  kelvin: %d°K", this.kelvin);
+    console.log("  pressure: %d kPa", this.pressure);
+    console.log("  feet: %d\"", this.feet);
+    console.log("  meters: %d", this.meters);
+    console.log("  relativeHumidity: %d RH", this.relativeHumidity);
+    console.log("  lightLevel: %d%", this.lightLevel);
     console.log("----------------------------------------");
   });
 });
@@ -72,7 +115,7 @@ var Weather = require("j5-sparkfun-weather-shield")(five);
 var board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_REDBOARD_1
+    deviceId: process.env.PARTICLE_PHOTON_DEVICE
   })
 });
 
@@ -83,13 +126,14 @@ board.on("ready", function() {
   });
 
   weather.on("data", function() {
-    console.log("  celsius: ", this.celsius);
-    console.log("  fahrenheit: ", this.fahrenheit);
-    console.log("  kelvin: ", this.kelvin);
-    console.log("  pressure: ", this.pressure);
-    console.log("  feet: ", this.feet);
-    console.log("  meters: ", this.meters);
-    console.log("  relativeHumidity: ", this.relativeHumidity);
+    console.log("  celsius: %d°C", this.celsius);
+    console.log("  fahrenheit: %d°F", this.fahrenheit);
+    console.log("  kelvin: %d°K", this.kelvin);
+    console.log("  pressure: %d kPa", this.pressure);
+    console.log("  feet: %d\"", this.feet);
+    console.log("  meters: %d", this.meters);
+    console.log("  relativeHumidity: %d RH", this.relativeHumidity);
+    console.log("  lightLevel: %d%", this.lightLevel);
     console.log("----------------------------------------");
   });
 });
