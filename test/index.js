@@ -2,7 +2,10 @@ require("es6-shim");
 
 var sinon = require("sinon");
 var Emitter = require("events").EventEmitter;
-var five = require("johnny-five");
+var five = {
+  Multi: function() {},
+  Light: function() {},
+};
 var Weather = require("../")(five);
 
 var ownProps = [
