@@ -1,0 +1,5 @@
+test/
+eg/
+firmware/
+node_modules/
+!node_modules/es6-shim
