@@ -31,7 +31,7 @@ The `Weather` class constructs objects that represent the built-in components of
 
 | Property   | Type      | Value(s)/Description      | Default | Required |
 |------------|-----------|---------------------------|---------|----------|
-| platform   | string    | ARDUINO, PHOTON           |         | yes      |
+| variant    | string    | ARDUINO, PHOTON           |         | yes      |
 | freq       | number    | Milliseconds. The rate in milliseconds to emit the data event |    25ms     | no      |
 
 #### Usage
@@ -45,7 +45,7 @@ var board = new five.Board();
 
 board.on("ready", function() {
   var weather = new Weather({
-    platform: "ARDUINO",
+    variant: "ARDUINO",
     freq: 200
   });
 
@@ -68,7 +68,8 @@ Using the Photon shield:
 ```js
 var Particle = require("particle-io");
 var five = require("johnny-five");
-var Weather = require("j5-sparkfun-weather-shield")(five);var board = new five.Board({
+var Weather = require("j5-sparkfun-weather-shield")(five);
+var board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
     deviceId: process.env.PARTICLE_PHOTON_REDBOARD_1
@@ -77,7 +78,7 @@ var Weather = require("j5-sparkfun-weather-shield")(five);var board = new five.B
 
 board.on("ready", function() {
   var weather = new Weather({
-    platform: "ARDUINO",
+    variant: "PHOTON",
     freq: 200
   });
 
@@ -99,4 +100,4 @@ board.on("ready", function() {
 
 ## NOTE
 
-The examples shown here are provided for illustration and do no specifically indicate platform support. This component class is expected to work with any platform that has I2C support. 
+The examples shown here are provided for illustration and do no specifically indicate variant  support. This component class is expected to work with any variant  that has I2C support. 

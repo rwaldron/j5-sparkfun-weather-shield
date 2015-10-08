@@ -17,7 +17,7 @@ module.exports = function(five) {
       var HTU21D = new five.Multi({ controller: "HTU21D" });
       var ALSPT19;
 
-      if (opts.platform === "ARDUINO") {
+      if (opts.variant === "ARDUINO") {
         // ALSPT19 = new five.Light({ controller: "ALSPT19" });
       }
 

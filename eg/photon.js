@@ -1,10 +1,19 @@
+var Particle = require("particle-io");
 var five = require("johnny-five");
+/**
+ *  var Weather = require("j5-sparkfun-weather-shield")(five);
+ */
 var Weather = require("../")(five);
-var board = new five.Board();
+var board = new five.Board({
+  io: new Particle({
+    token: process.env.PARTICLE_TOKEN,
+    deviceId: process.env.PARTICLE_PHOTON_REDBOARD_1
+  })
+});
 
 board.on("ready", function() {
   var weather = new Weather({
-    platform: "ARDUINO",
+    variant: "ARDUINO",
     freq: 200
   });
 

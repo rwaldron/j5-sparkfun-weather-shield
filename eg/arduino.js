@@ -7,7 +7,7 @@ var board = new five.Board();
 
 board.on("ready", function() {
   var weather = new Weather({
-    platform: "ARDUINO",
+    variant: "ARDUINO",
     freq: 200
   });
 
