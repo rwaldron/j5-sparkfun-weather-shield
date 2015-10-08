@@ -277,4 +277,38 @@ exports["Weather"] = {
 
     test.done();
   },
+
+  toJSON: function(test) {
+    test.expect(1);
+
+    var weather = new Weather({
+      variant: "ARDUINO",
+    });
+
+    var spy = this.sandbox.spy(weather, "toJSON");
+
+    JSON.stringify(weather);
+
+    test.equal(spy.callCount, 1);
+
+    test.done();
+  },
+
+  serialization: function(test) {
+    test.expect(2);
+
+    var spy = this.sandbox.spy();
+    var weather = new Weather({
+      variant: "ARDUINO",
+    });
+
+    weather.on("data", spy);
+
+    this.clock.tick(25);
+
+    test.deepEqual(spy.lastCall.args[0], weather.toJSON());
+    test.deepEqual(JSON.stringify(weather), JSON.stringify(weather.toJSON()));
+
+    test.done();
+  },
 };

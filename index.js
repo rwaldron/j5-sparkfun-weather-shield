@@ -46,9 +46,7 @@ module.exports = function(five) {
       var freq = opts.freq || 25;
       var emit = this.emit.bind(this);
       var emitBoundData = function(event) {
-        var data = Object.assign({}, this);
-        delete data._events;
-        emit(event, data);
+        emit(event, Object.assign({}, this.toJSON()));
       }.bind(this);
 
       [MPL3115A2, HTU21D, ALSPT19].forEach(function(sensor) {
@@ -121,6 +119,14 @@ module.exports = function(five) {
             return ALSPT19 ? ALSPT19.level : null;
           }
         },
+        toJSON: {
+          configurable: true,
+          value: function() {
+            var data = Object.assign({}, this);
+            delete data._events;
+            return data;
+          }
+        }
       });
     }
 
