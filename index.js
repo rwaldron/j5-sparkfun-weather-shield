@@ -18,7 +18,9 @@ module.exports = function(five) {
       var ALSPT19;
 
       if (opts.variant === "ARDUINO") {
-        // ALSPT19 = new five.Light({ controller: "ALSPT19" });
+        ALSPT19 = new five.Light({
+          controller: "ALSPT19"
+        });
       }
 
       var freq = opts.freq || 25;
@@ -27,10 +29,12 @@ module.exports = function(five) {
         emit(event, Object.assign({}, this));
       }.bind(this);
 
-      [MPL3115A2, HTU21D /*, ALSPT19 */].forEach(function(sensor) {
-        sensor.on("change", function() {
-          emitBoundData("change");
-        }.bind(this));
+      [MPL3115A2, HTU21D, ALSPT19].forEach(function(sensor) {
+        if (sensor) {
+          sensor.on("change", function() {
+            emitBoundData("change");
+          }.bind(this));
+        }
       }, this);
 
       setInterval(function() {
@@ -82,13 +86,12 @@ module.exports = function(five) {
             return HTU21D.hygrometer.relativeHumidity;
           }
         },
-        /*
         lightLevel: {
+          enumerable: true,
           get: function() {
             return ALSPT19 ? ALSPT19.level : null;
           }
         },
-       */
       });
     }
 
