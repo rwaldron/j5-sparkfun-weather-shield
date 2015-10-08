@@ -25,7 +25,6 @@ board.on("ready", function() {
     console.log("feet: %d\"", this.feet);
     console.log("meters: %d", this.meters);
     console.log("relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("lightLevel: %d%", this.lightLevel);
     console.log("----------------------------------------");
   });
 });

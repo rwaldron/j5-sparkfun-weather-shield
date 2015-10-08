@@ -136,7 +136,6 @@ board.on("ready", function() {
     console.log("feet: %d\"", this.feet);
     console.log("meters: %d", this.meters);
     console.log("relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("lightLevel: %d%", this.lightLevel);
     console.log("----------------------------------------");
   });
 });
@@ -169,6 +168,8 @@ Produces:
   "lightLevel": 50
 }
 ```
+
+> Since the Photon shield **does not** include the `ALS-PT19` light sensor, the `lightLevel` property will _always_ be `null` for that variant.
 
 
 ## NOTE
