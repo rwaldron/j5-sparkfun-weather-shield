@@ -79,9 +79,9 @@ The `Weather` class constructs objects that represent the built-in components of
 | variant    | string    | ARDUINO, PHOTON           |         | yes      |
 | freq       | number    | Milliseconds. The rate in milliseconds to emit the data event |    25ms     | no      |
 
-#### Usage
 
-Using the Arduino shield: 
+
+#### Using the Arduino shield
 
 ```js
 var five = require("johnny-five");
@@ -109,7 +109,7 @@ board.on("ready", function() {
 ```
 
 
-Using the Photon shield: 
+#### Using the Photon shield
 
 ```js
 var Particle = require("particle-io");
@@ -143,7 +143,7 @@ board.on("ready", function() {
 ```
 
 
-Convenient serialization for data tracking: 
+#### Convenient serialization for data tracking: 
 
 ```js
 var weather = new Weather({
