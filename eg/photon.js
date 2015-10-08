@@ -18,14 +18,14 @@ board.on("ready", function() {
   });
 
   weather.on("data", function() {
-    console.log("  celsius: %d°C", this.celsius);
-    console.log("  fahrenheit: %d°F", this.fahrenheit);
-    console.log("  kelvin: %d°K", this.kelvin);
-    console.log("  pressure: %d kPa", this.pressure);
-    console.log("  feet: %d\"", this.feet);
-    console.log("  meters: %d", this.meters);
-    console.log("  relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("  lightLevel: %d%", this.lightLevel);
+    console.log("celsius: %d°C", this.celsius);
+    console.log("fahrenheit: %d°F", this.fahrenheit);
+    console.log("kelvin: %d°K", this.kelvin);
+    console.log("pressure: %d kPa", this.pressure);
+    console.log("feet: %d\"", this.feet);
+    console.log("meters: %d", this.meters);
+    console.log("relativeHumidity: %d RH", this.relativeHumidity);
+    console.log("lightLevel: %d%", this.lightLevel);
     console.log("----------------------------------------");
   });
 });
