@@ -12,6 +12,6 @@ board.on("ready", function() {
   });
 
   weather.on("data", function() {
-    console.log(JSON.stringify(this));
+    console.log(JSON.stringify(this, null, 2));
   });
 });

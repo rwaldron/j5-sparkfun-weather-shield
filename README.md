@@ -143,6 +143,32 @@ board.on("ready", function() {
 ```
 
 
+Convenient serialization for data tracking: 
+
+```js
+var weather = new Weather({
+  variant: ...
+});
+
+weather.on("data", function() {
+  console.log(JSON.stringify(this, null, 2));
+});
+```
+
+Produces: 
+
+```
+{
+  "celsius": 24,
+  "fahrenheit": 75.2,
+  "kelvin": 297.15,
+  "pressure": 125.5,
+  "feet": 3.28,
+  "meters": 1,
+  "relativeHumidity": 48,
+  "lightLevel": 50
+}
+```
 
 
 ## NOTE
