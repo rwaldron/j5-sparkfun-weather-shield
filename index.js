@@ -16,13 +16,11 @@ module.exports = function(five) {
       }
 
       var ALSPT19;
-      var HTU21D = new five.Multi({
-        controller: "HTU21D"
-      });
-      var MPL3115A2 = new five.Multi({
-        controller: "MPL3115A2"
-      });
       var variant;
+      var hasElevation = false;
+      var mplOpts = {
+        controller: "MPL3115A2",
+      };
 
       if (typeof opts === "string") {
         variant = opts;
@@ -30,6 +28,11 @@ module.exports = function(five) {
           variant: variant,
           freq: 25,
         };
+      }
+
+      if (typeof opts.elevation !== "undefined") {
+        mplOpts.elevation = opts.elevation;
+        hasElevation = true;
       }
 
       if (opts.variant === undefined) {
@@ -43,10 +46,25 @@ module.exports = function(five) {
         });
       }
 
+      var HTU21D = new five.Multi({
+        controller: "HTU21D"
+      });
+
+      var MPL3115A2 = new five.Multi(mplOpts);
+
+      function isCalibrated() {
+        if (!Number(MPL3115A2.barometer.pressure)) {
+          return false;
+        }
+        return true;
+      }
+
       var freq = opts.freq || 25;
       var emit = this.emit.bind(this);
       var emitBoundData = function(event) {
-        emit(event, Object.assign({}, this.toJSON()));
+        if (isCalibrated()) {
+          emit(event, Object.assign({}, this.toJSON()));
+        }
       }.bind(this);
 
       [MPL3115A2, HTU21D, ALSPT19].forEach(function(sensor) {
@@ -62,6 +80,11 @@ module.exports = function(five) {
       }, freq);
 
       Object.defineProperties(this, {
+        isCalibrated: {
+          get: function() {
+            return isCalibrated();
+          }
+        },
         celsius: {
           enumerable: true,
           get: function() {
@@ -98,13 +121,13 @@ module.exports = function(five) {
         feet: {
           enumerable: true,
           get: function() {
-            return MPL3115A2.altimeter.feet;
+            return hasElevation ? MPL3115A2.altimeter.feet : null;
           }
         },
         meters: {
           enumerable: true,
           get: function() {
-            return MPL3115A2.altimeter.meters;
+            return hasElevation ? MPL3115A2.altimeter.meters : null;
           }
         },
         relativeHumidity: {

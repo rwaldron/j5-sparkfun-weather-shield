@@ -234,6 +234,7 @@ exports["Weather"] = {
     var spy = this.sandbox.spy();
     var weather = new Weather({
       variant: "ARDUINO",
+      elevation: 1,
     });
 
     weather.on("change", spy);

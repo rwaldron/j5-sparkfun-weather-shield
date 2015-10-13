@@ -7,7 +7,7 @@ var Weather = require("../")(five);
 var board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_DEVICE
+    deviceId: process.env.PARTICLE_PHOTON_1
   })
 });
 
@@ -22,8 +22,6 @@ board.on("ready", function() {
     console.log("fahrenheit: %d°F", this.fahrenheit);
     console.log("kelvin: %d°K", this.kelvin);
     console.log("pressure: %d kPa", this.pressure);
-    console.log("feet: %d\"", this.feet);
-    console.log("meters: %d", this.meters);
     console.log("relativeHumidity: %d RH", this.relativeHumidity);
     console.log("----------------------------------------");
   });
