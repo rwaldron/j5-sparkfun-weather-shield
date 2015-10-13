@@ -43,14 +43,12 @@ The `Weather` class constructs objects that represent the built-in components of
   ```js
   var weather = new Weather({
     variant: "ARDUINO",
-    freq: 200
   });
 
   ...or...
   
   var weather = new Weather({
     variant: "PHOTON",
-    freq: 200
   });
   ```
 
