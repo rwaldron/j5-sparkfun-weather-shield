@@ -30,15 +30,6 @@ npm install johnny-five particle-io j5-sparkfun-weather-shield
 
 The `Weather` class constructs objects that represent the built-in components of the shield.
 
-- Shorthand Initialization, defaults "data" to 25ms intervals
-  ```js
-  var weather = new Weather("ARDUINO");
-
-  ...or...
-
-  var weather = new Weather("PHOTON");
-  ```
-
 - Explicit Initialization, defaults "data" to 25ms intervals
   ```js
   var weather = new Weather({
@@ -66,7 +57,6 @@ The `Weather` class constructs objects that represent the built-in components of
     freq: 200
   });
   ```
-
 
 
 
