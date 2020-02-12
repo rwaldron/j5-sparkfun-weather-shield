@@ -5,28 +5,28 @@
 
 For use with [Johnny-Five](https://github.com/rwaldron/johnny-five).
 
+- [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) `DEV-13956`, `13956` (Current)
+  + Humidity/Temperature Sensor - Si7021
+  + Barometric Pressure - MPL3115A2
+  + Light Sensor - ALS-PT19
+  
 
 - [SparkFun Weather Shield](https://www.sparkfun.com/products/12081) `DEV-12081`, `12081` (Retired)
   + Humidity/Temperature Sensor - HTU21D
   + Barometric Pressure - MPL3115A2
   + Light Sensor - ALS-PT19
-  + ![](https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-04.jpg)
-
-- [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) `DEV-13956`, `13956` (Current)
-  + Humidity/Temperature Sensor - Si7021
-  + Barometric Pressure - MPL3115A2
-  + Light Sensor - ALS-PT19
-  + ![](https://cdn.sparkfun.com//assets/parts/1/1/6/6/5/13956-04.jpg)
   
-- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630) `DEV-13630`, `13630` (Retired)
-  + Humidity/Temperature Sensor - HTU21D
-  + Barometric Pressure - MPL3115A2
-  + ![](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-05a.jpg)
 
 - [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13674) `DEV-13674`, `13674` (Current)
   + Humidity/Temperature Sensor - Si7021
   + Barometric Pressure - MPL3115A2
-  + ![](https://cdn.sparkfun.com//assets/parts/1/1/1/2/1/13674-05.jpg)
+  
+  
+- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630) `DEV-13630`, `13630` (Retired)
+  + Humidity/Temperature Sensor - HTU21D
+  + Barometric Pressure - MPL3115A2
+  
+
 
 ## API & Documentation
 
@@ -93,14 +93,12 @@ The `Weather` class constructs objects that represent the built-in components of
 
 #### Variants
 
-| Shield   | Variant Values     | Retired ? |
-|----------|--------------------|-----------|
-| [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) | `"DEV-13956"`, `"DEV13956"`, `13956` | No |
-| [SparkFun Weather Shield](https://www.sparkfun.com/products/12081) | `"DEV-12081"`, `"DEV12081"`, `12081` | Yes |
-| [SparkFun Photon Weather Shield
-](https://www.sparkfun.com/products/13674) | `"DEV-13674"`, `"DEV13674"`, `13674` | No |
-| [SparkFun Photon Weather Shield
-](https://www.sparkfun.com/products/13630) | `"DEV-13630"`, `"DEV13630"`, `13630` | Yes |
+| Shield | Product Name   | Variant Values     | Retired ? |
+|----------|----------|--------------------|-----------|
+| <img src="https://cdn.sparkfun.com//assets/parts/1/1/6/6/5/13956-04.jpg" width=100>| [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) | `"DEV-13956"`, `"DEV13956"`, `13956` | No |
+| <img src="https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-04.jpg" width=100>| [SparkFun Weather Shield](https://www.sparkfun.com/products/12081) | `"DEV-12081"`, `"DEV12081"`, `12081` | Yes |
+| <img src="https://cdn.sparkfun.com//assets/parts/1/1/1/2/1/13674-05.jpg" width=100>| [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13674) | `"DEV-13674"`, `"DEV13674"`, `13674` | No |
+| <img src="https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-05a.jpg" width=100>| [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630) | `"DEV-13630"`, `"DEV13630"`, `13630` | Yes |
 
 
 
