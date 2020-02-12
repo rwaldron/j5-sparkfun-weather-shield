@@ -1,23 +1,32 @@
-var five = require("johnny-five");
+const five = require("johnny-five");
 /**
- *  var Weather = require("j5-sparkfun-weather-shield")(five);
+ *  const Weather = require("j5-sparkfun-weather-shield")(five);
  */
-var Weather = require("../")(five);
-var board = new five.Board();
+const Weather = require("../")(five);
+const board = new five.Board();
 
-board.on("ready", function() {
-  var weather = new Weather({
+board.on("ready", () => {
+  const weather = new Weather({
     variant: "ARDUINO",
     freq: 200,
   });
 
-  weather.on("data", function() {
-    console.log("celsius: %d°C", this.celsius);
-    console.log("fahrenheit: %d°F", this.fahrenheit);
-    console.log("kelvin: %d°K", this.kelvin);
-    console.log("pressure: %d kPa", this.pressure);
-    console.log("relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("lightLevel: %d%", this.lightLevel);
+  weather.on("data", () => {
+    const {
+      celsius,
+      fahrenheit,
+      kelvin,
+      pressure,
+      relativeHumidity,
+      lightLevel
+    } = weather;
+
+    console.log("celsius: %d°C", celsius);
+    console.log("fahrenheit: %d°F", fahrenheit);
+    console.log("kelvin: %d°K", kelvin);
+    console.log("pressure: %d kPa", pressure);
+    console.log("relativeHumidity: %d RH", relativeHumidity);
+    console.log("lightLevel: %d%", lightLevel);
     console.log("----------------------------------------");
   });
 });
