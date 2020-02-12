@@ -50,27 +50,27 @@ The `Weather` class constructs objects that represent the built-in components of
 - Explicit Initialization, defaults "data" to 25ms intervals
   ```js
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13956",
   });
 
   ...or...
   
   const weather = new Weather({
-    variant: "PHOTON",
+    variant: "DEV-13674",
   });
   ```
 
 - Explicit Initialization, specify "data" to 200ms intervals
   ```js
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13956",
     period: 200
   });
 
   ...or...
 
   const weather = new Weather({
-    variant: "PHOTON",
+    variant: "DEV-13674",
     period: 200
   });
   ```
