@@ -113,7 +113,7 @@ const board = new five.Board();
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13956",
     period: 200
   });
 
@@ -147,7 +147,7 @@ const board = new five.Board();
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13956",
     period: 200, 
     // Set your base elevation with a value in meters,
     // as reported by http://www.whatismyelevation.com/.
@@ -202,7 +202,7 @@ const board = new five.Board({
 
 board.on("ready", function() {
   var weather = new Weather({
-    variant: "PHOTON",
+    variant: "DEV-13674",
     period: 200
   });
 
@@ -242,7 +242,7 @@ const board = new five.Board({
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "PHOTON",
+    variant: "DEV-13674",
     period: 200,
     // Set your base elevation with a value in meters,
     // as reported by http://www.whatismyelevation.com/.
