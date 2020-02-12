@@ -131,8 +131,11 @@ board.on("ready", () => {
   const weather = new Weather({
     variant: "ARDUINO",
     period: 200, 
-    // Input meters from whatismyelevation.com
-    elevation: 12 
+    // Set your base elevation with a value in meters,
+    // as reported by http://www.whatismyelevation.com/.
+    // `5` is the elevation (meters) of the
+    // Bocoup office in downtown Boston
+    elevation: 5,
   });
 
   // Including elevation for altitude readings will
@@ -223,8 +226,11 @@ board.on("ready", () => {
   const weather = new Weather({
     variant: "PHOTON",
     period: 200,
-    // Input meters from whatismyelevation.com
-    elevation: 12     
+    // Set your base elevation with a value in meters,
+    // as reported by http://www.whatismyelevation.com/.
+    // `5` is the elevation (meters) of the
+    // Bocoup office in downtown Boston
+    elevation: 5,  
   });
 
   // Including elevation for altitude readings will
