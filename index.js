@@ -1,164 +1,200 @@
-var Emitter = require("events").EventEmitter;
-var util = require("util");
+const {
+  stripIndent
+} = require("common-tags");
+const Emitter = require("events");
 
-function average(values) {
-  return values.reduce(function(a, b) {
-    return a + b;
-  }) / values.length;
-}
+const ALSPT19 = "ALSPT19";
+const HTU21D = "HTU21D";
+const MPL3115A2 = "MPL3115A2";
+const SI7021 = "SI7021";
+
+const variants = {
+  // Arduino
+  13956: [MPL3115A2, SI7021, ALSPT19],
+  13674: [MPL3115A2, HTU21D, ALSPT19],
+  // Photon
+  13630: [MPL3115A2, SI7021],
+  12081: [MPL3115A2, HTU21D],
+};
+
+const normalizeVariant = input => typeof input === "number" ?
+  input : parseInt(input.replace(/\D+/g, ""), 10);
+const average = values => (values.reduce((a, b) => a + b) / values.length);
+const enumerable = true;
 
 module.exports = function(five) {
-  return (function() {
 
-    function Component(opts) {
-      if (!(this instanceof Component)) {
-        return new Component(opts);
-      }
+  class Weather extends Emitter {
+    constructor(options) {
+      super();
 
-      var ALSPT19;
-      var variant;
-      var hasElevation = false;
-      var mplOpts = {
-        controller: "MPL3115A2",
-      };
-
-      if (typeof opts === "string") {
-        variant = opts;
-        opts = {
-          variant: variant,
+      if (typeof options === "string") {
+        let variant = options;
+        options = {
+          variant,
           period: 25,
         };
       }
 
-      if (typeof opts.elevation !== "undefined") {
-        mplOpts.elevation = opts.elevation;
-        hasElevation = true;
+      const variant = normalizeVariant(options.variant);
+
+      if (options.variant === undefined || !variant) {
+        throw new Error(
+          stripIndent `
+          Missing valid variant.
+          Check the 'Variants' section of the README for more information
+          `
+        );
       }
 
-      if (opts.variant === undefined) {
-        throw new Error("Missing variant");
+      if (options.variant === "ARDUINO" ||
+        options.variant === "PHOTON") {
+        throw new Error(
+          stripIndent `
+          Invalid variant.
+          Variants 'ARDUINO' and 'PHOTON' are not supported in this version.
+          Check the 'Variants' section of the README for more information
+          `
+        );
       }
 
-      if (opts.variant === "ARDUINO") {
-        ALSPT19 = new five.Light({
-          controller: "ALSPT19",
+      if (typeof options.freq !== "undefined") {
+        console.warn("The option 'freq' will not be supported in a future version of this plugin. Please use 'period' instead.");
+      }
+
+      const [
+        barometer,
+        thermometer,
+        luxometer
+      ] = variants[variant];
+      const hasElevation = typeof options.elevation !== "undefined";
+      const elevation = hasElevation ? {
+        elevation: options.elevation
+      } : {};
+      const period = options.freq || options.period || 25;
+
+      const A = barometer ?
+        new five.Multi(
+          Object.assign({
+            controller: barometer
+          }, elevation)
+        ) : null;
+
+      const B = thermometer ?
+        new five.Multi({
+          controller: thermometer
+        }) : null;
+
+      const C = luxometer ?
+        new five.Light({
+          controller: luxometer,
           pin: "A1",
-        });
-      }
+        }) : null;
 
-      var HTU21D = new five.Multi({
-        controller: "HTU21D"
-      });
-
-      var MPL3115A2 = new five.Multi(mplOpts);
-
-      function isCalibrated() {
-        if (!Number(MPL3115A2.barometer.pressure)) {
+      const isCalibrated = () => {
+        if (!Number(A.barometer.pressure)) {
           return false;
         }
         return true;
-      }
+      };
 
-      var period = opts.freq || opts.period || 25;
-      var emit = this.emit.bind(this);
-      var emitBoundData = function(event) {
+      const emitBoundData = event => {
         if (isCalibrated()) {
-          emit(event, Object.assign({}, this.toJSON()));
+          this.emit(event, Object.assign({}, this.toJSON()));
         }
-      }.bind(this);
+      };
 
-      [MPL3115A2, HTU21D, ALSPT19].forEach(function(sensor) {
+      [A, B, C].forEach(sensor => {
         if (sensor) {
-          sensor.on("change", function() {
-            emitBoundData("change");
-          }.bind(this));
+          sensor.on("change", () => emitBoundData("change"));
         }
-      }, this);
+      });
 
-      setInterval(function() {
-        emitBoundData("data");
-      }, period);
+      setInterval(() => emitBoundData("data"), period);
 
       Object.defineProperties(this, {
         isCalibrated: {
-          get: function() {
+          get() {
             return isCalibrated();
           }
         },
         celsius: {
-          enumerable: true,
-          get: function() {
+          enumerable,
+          get() {
             return average([
-              MPL3115A2.temperature.celsius,
-              HTU21D.temperature.celsius
-            ]);
+              A.thermometer.celsius,
+              B.thermometer.celsius
+            ]) >>> 0;
           }
         },
         fahrenheit: {
-          enumerable: true,
-          get: function() {
+          enumerable,
+          get() {
             return average([
-              MPL3115A2.temperature.fahrenheit,
-              HTU21D.temperature.fahrenheit
-            ]);
+              A.thermometer.fahrenheit,
+              B.thermometer.fahrenheit
+            ]) >>> 0;
           }
         },
         kelvin: {
-          enumerable: true,
-          get: function() {
+          enumerable,
+          get() {
             return average([
-              MPL3115A2.temperature.kelvin,
-              HTU21D.temperature.kelvin
+              A.thermometer.kelvin,
+              B.thermometer.kelvin
             ]);
           }
         },
         pressure: {
-          enumerable: true,
-          get: function() {
-            return MPL3115A2.barometer.pressure;
+          enumerable,
+          get() {
+            return A.barometer.pressure;
           }
         },
         feet: {
-          enumerable: true,
-          get: function() {
-            return hasElevation ? MPL3115A2.altimeter.feet : null;
+          enumerable,
+          get() {
+            return hasElevation ? A.altimeter.feet : null;
           }
         },
         meters: {
-          enumerable: true,
-          get: function() {
-            return hasElevation ? MPL3115A2.altimeter.meters : null;
+          enumerable,
+          get() {
+            return hasElevation ? A.altimeter.meters : null;
           }
         },
         relativeHumidity: {
-          enumerable: true,
-          get: function() {
-            return HTU21D.hygrometer.relativeHumidity;
+          enumerable,
+          get() {
+            return B.hygrometer.relativeHumidity;
           }
         },
         lightLevel: {
-          enumerable: true,
-          get: function() {
-            return ALSPT19 ? ALSPT19.level : null;
+          enumerable,
+          get() {
+            return C ? C.level : null;
           }
         },
         toJSON: {
           configurable: true,
-          value: function() {
-            var data = Object.assign({}, this);
+          value() {
+            const data = Object.assign({}, this);
             delete data._events;
+            delete data._eventsCount;
+            delete data._maxListeners;
             return data;
           }
         }
       });
     }
+  }
 
-    util.inherits(Component, Emitter);
+  if (global.IS_TEST_MODE) {
+    Weather.normalizeVariant = normalizeVariant;
+  }
 
-    return Component;
-  }());
+  return Weather;
 };
-
 
 /**
  *  To use the plugin in a program:

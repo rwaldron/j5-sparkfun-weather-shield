@@ -1,3 +1,4 @@
+// Be sure to "npm install johnny-five particle-io"
 const Particle = require("particle-io");
 const five = require("johnny-five");
 /**
@@ -13,7 +14,7 @@ const board = new five.Board({
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "PHOTON",
+    variant: "DEV-13674",
     period: 200,
     // Set your base elevation with a value in meters,
     // as reported by http://www.whatismyelevation.com/.

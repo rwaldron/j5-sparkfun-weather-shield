@@ -1,3 +1,4 @@
+// Be sure to "npm install johnny-five particle-io"
 const Particle = require("particle-io");
 const five = require("johnny-five");
 /**
@@ -13,7 +14,7 @@ const board = new five.Board({
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13674",
     period: 200,
   });
 

@@ -13,13 +13,18 @@ For use with [Johnny-Five](https://github.com/rwaldron/johnny-five).
   ![](https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-04.jpg)
 
 - [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) `DEV-13956`, `13956` (Current)
-  + Humidity/Temperature Sensor - HTU21D
+  + Humidity/Temperature Sensor - Si7021
   + Barometric Pressure - MPL3115A2
   + Light Sensor - ALS-PT19
   ![](https://cdn.sparkfun.com//assets/parts/1/1/6/6/5/13956-04.jpg)
   
-- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13674) `DEV-13674`, `13674` (Current)
+- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630) `DEV-13630`, `13630` (Retired)
   + Humidity/Temperature Sensor - HTU21D
+  + Barometric Pressure - MPL3115A2
+  ![](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-05a.jpg)
+
+- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13674) `DEV-13674`, `13674` (Current)
+  + Humidity/Temperature Sensor - Si7021
   + Barometric Pressure - MPL3115A2
   ![](https://cdn.sparkfun.com//assets/parts/1/1/1/2/1/13674-05.jpg)
 
@@ -74,14 +79,29 @@ The `Weather` class constructs objects that represent the built-in components of
 
 #### Parameters
 
-| Property   | Type      | Value(s)/Description      | Default | Required |
-|------------|-----------|---------------------------|---------|----------|
-| variant    | string    | ARDUINO, PHOTON           |         | yes      |
-| elevation  | number    | Meters, as reported from whatismyelevation.com (or similar)           |         | yes \*      |
-| period       | number    | Milliseconds. The rate in milliseconds to emit the data event |    25ms     | no      |
+| Property   | Type      | Value(s)/Description      | Default | Required | Version |
+|------------|-----------|---------------------------|---------|----------|---------------|
+| variant    | string    | `"ARDUINO"`, `"PHOTON"`   | no      | yes      | v0.1.0-v1.0.0 |
+| variant    | string or number   | See [Variants](#variants) | no      | yes      | v2.0.0+       |
+| elevation  | number    | Base elevation in meters (You can use [whatismyelevation.com](http://whatismyelevation.com) to find out the base elevation for your location) |         | yes \*      | yes      | all      |
+| freq       | number    | Milliseconds. The rate in milliseconds to emit the data event |    `25` (ms)     | no      | v0.1.0-v1.0.0      |
+| period | number    | Milliseconds. The rate in milliseconds to emit the data event |    `25` (ms)     | no      | v2.0.0+      |
 
 
 \* If `elevation` is omitted, the value of the `feet` and `meters` properties will be `null`. When `elevation` is included, there is a 3 second calibration window before all values are reported.
+
+
+#### Variants
+
+| Shield   | Variant Values     | Retired ? |
+|----------|--------------------|-----------|
+| [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) | `"DEV-13956"`, `"DEV13956"`, `13956` | No |
+| [SparkFun Weather Shield](https://www.sparkfun.com/products/12081) | `"DEV-12081"`, `"DEV12081"`, `12081` | Yes |
+| [SparkFun Photon Weather Shield
+](https://www.sparkfun.com/products/13674) | `"DEV-13674"`, `"DEV13674"`, `13674` | No |
+| [SparkFun Photon Weather Shield
+](https://www.sparkfun.com/products/13630) | `"DEV-13630"`, `"DEV13630"`, `13630` | Yes |
+
 
 
 #### Using the Arduino shield

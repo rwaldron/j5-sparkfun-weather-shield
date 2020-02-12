@@ -1,14 +1,13 @@
-require("es6-shim");
-
-var sinon = require("sinon");
-var Emitter = require("events").EventEmitter;
-var five = {
+global.IS_TEST_MODE = true;
+const sinon = require("sinon");
+const Emitter = require("events");
+const five = {
   Multi: function() {},
   Light: function() {},
 };
-var Weather = require("../")(five);
+const Weather = require("../")(five);
 
-var ownProps = [
+const ownProps = [
   "celsius",
   "fahrenheit",
   "kelvin",
@@ -20,18 +19,20 @@ var ownProps = [
 ];
 
 exports["Weather"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.clock = this.sandbox.useFakeTimers();
     this.multis = {};
     this.light = null;
 
-    this.Multi = this.sandbox.stub(five, "Multi", function(opts) {
-      var multi = new Emitter();
+    this.Multi = this.sandbox.stub(five, "Multi", ({
+      controller
+    }) => {
+      const multi = new Emitter();
 
-      multi.temperature = {
+      multi.thermometer = {
         celsius: 24,
-        fahrenheit: 75.2,
+        fahrenheit: 75,
         kelvin: 297.15,
       };
 
@@ -52,150 +53,300 @@ exports["Weather"] = {
         relativeHumidity: 48,
       };
 
-      this.multis[opts.controller] = multi;
+      this.multis[controller] = multi;
 
       return multi;
-    }.bind(this));
+    });
 
-    this.Light = this.sandbox.stub(five, "Light", function() {
-      var light = new Emitter();
+    this.Light = this.sandbox.stub(five, "Light", () => {
+      const light = new Emitter();
 
       light.level = 50;
 
       this.light = light;
       return light;
-    }.bind(this));
+    });
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     this.sandbox.restore();
     done();
   },
 
-  initializesArduino: function(test) {
-    test.expect(13);
-
-    var weather = new Weather({
-      variant: "ARDUINO"
-    });
-
-    test.equal(this.Multi.callCount, 2);
-    test.equal(this.Light.callCount, 1);
-
-    test.deepEqual(this.Multi.firstCall.args[0], {
-      controller: "HTU21D"
-    });
-    test.deepEqual(this.Multi.lastCall.args[0], {
-      controller: "MPL3115A2"
-    });
-    test.deepEqual(this.Light.lastCall.args[0], {
-      controller: "ALSPT19",
-      pin: "A1",
-    });
-
-    ownProps.forEach(function(own) {
-      test.ok(own in weather);
-    });
-
-    test.done();
-  },
-
-  initializesArduinoShorthand: function(test) {
-    test.expect(13);
-
-    var weather = new Weather("ARDUINO");
-
-    test.equal(this.Multi.callCount, 2);
-    test.equal(this.Light.callCount, 1);
-
-    test.deepEqual(this.Multi.firstCall.args[0], {
-      controller: "HTU21D"
-    });
-    test.deepEqual(this.Multi.lastCall.args[0], {
-      controller: "MPL3115A2"
-    });
-    test.deepEqual(this.Light.lastCall.args[0], {
-      controller: "ALSPT19",
-      pin: "A1",
-    });
-
-    ownProps.forEach(function(own) {
-      test.ok(own in weather);
-    });
-
-    test.done();
-  },
-
-  initializesPhoton: function(test) {
-    test.expect(12);
-
-    var weather = new Weather({
-      variant: "PHOTON"
-    });
-
-    test.equal(this.Multi.callCount, 2);
-    test.equal(this.Light.callCount, 0);
-
-    test.deepEqual(this.Multi.firstCall.args[0], {
-      controller: "HTU21D"
-    });
-    test.deepEqual(this.Multi.lastCall.args[0], {
-      controller: "MPL3115A2"
-    });
-
-    ownProps.forEach(function(own) {
-      test.ok(own in weather);
-    });
-
-    test.done();
-  },
-
-  initializesPhotonShorthand: function(test) {
-    test.expect(12);
-
-    var weather = new Weather("PHOTON");
-
-    test.equal(this.Multi.callCount, 2);
-    test.equal(this.Light.callCount, 0);
-
-    test.deepEqual(this.Multi.firstCall.args[0], {
-      controller: "HTU21D"
-    });
-    test.deepEqual(this.Multi.lastCall.args[0], {
-      controller: "MPL3115A2"
-    });
-
-    ownProps.forEach(function(own) {
-      test.ok(own in weather);
-    });
-
-    test.done();
-  },
-
-  missingVariant: function(test) {
+  stopUsingFreq(test) {
     test.expect(2);
 
-    test.throws(function() {
+    this.warn = this.sandbox.stub(console, "warn");
+
+    new Weather({
+      variant: 13956,
+      freq: 0
+    });
+
+    test.equal(this.warn.callCount, 1);
+    test.equal(this.warn.getCall(0).args[0], "The option 'freq' will not be supported in a future version of this plugin. Please use 'period' instead.");
+    test.done();
+  },
+
+  missingVariant(test) {
+    test.expect(2);
+
+    test.throws(() => {
       new Weather();
     });
 
-    test.throws(function() {
+    test.throws(() => {
       new Weather({
-        freq: 0
+        period: 0
       });
     });
 
     test.done();
   },
 
-  freq: function(test) {
+  invalidVariant(test) {
     test.expect(2);
 
-    var spy = this.sandbox.spy();
-    var weather = new Weather({
-      variant: "ARDUINO",
-      freq: 1,
+    test.throws(() => {
+      new Weather("ARDUINO");
+    });
+
+    test.throws(() => {
+      new Weather({
+        variant: "ARDUINO"
+      });
+    });
+
+    test.done();
+  },
+
+  normalizeVariant(test) {
+    test.expect(4);
+
+    test.equal(Weather.normalizeVariant("DEV-13956"), 13956);
+    test.equal(Weather.normalizeVariant("DEV13956"), 13956);
+    test.equal(Weather.normalizeVariant("13956"), 13956);
+    test.equal(Weather.normalizeVariant(13956), 13956);
+
+    test.done();
+  },
+
+  DEV13956: {
+    initializesArduino(test) {
+      test.expect(13);
+
+      const weather = new Weather({
+        variant: "DEV-13956"
+      });
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 1);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "SI7021"
+      });
+      test.deepEqual(this.Light.lastCall.args[0], {
+        controller: "ALSPT19",
+        pin: "A1",
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+
+    initializesArduinoShorthand(test) {
+      test.expect(13);
+
+      const weather = new Weather("DEV-13956");
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 1);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "SI7021"
+      });
+      test.deepEqual(this.Light.lastCall.args[0], {
+        controller: "ALSPT19",
+        pin: "A1",
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+  },
+
+  DEV13674: {
+    initializesArduino(test) {
+      test.expect(13);
+
+      const weather = new Weather({
+        variant: "DEV-13674"
+      });
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 1);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "HTU21D"
+      });
+      test.deepEqual(this.Light.lastCall.args[0], {
+        controller: "ALSPT19",
+        pin: "A1",
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+
+    initializesArduinoShorthand(test) {
+      test.expect(13);
+
+      const weather = new Weather("DEV-13674");
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 1);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "HTU21D"
+      });
+      test.deepEqual(this.Light.lastCall.args[0], {
+        controller: "ALSPT19",
+        pin: "A1",
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+  },
+
+  DEV13630: {
+    initializesPhoton(test) {
+      test.expect(12);
+
+      const weather = new Weather({
+        variant: "DEV-13630"
+      });
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 0);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "SI7021"
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+
+    initializesPhotonShorthand(test) {
+      test.expect(12);
+
+      const weather = new Weather("DEV-13630");
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 0);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "SI7021"
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+  },
+
+  DEV12081: {
+    initializesPhoton(test) {
+      test.expect(12);
+
+      const weather = new Weather({
+        variant: "DEV-12081"
+      });
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 0);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "HTU21D"
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+
+    initializesPhotonShorthand(test) {
+      test.expect(12);
+
+      const weather = new Weather("DEV-12081");
+
+      test.equal(this.Multi.callCount, 2);
+      test.equal(this.Light.callCount, 0);
+
+      test.deepEqual(this.Multi.firstCall.args[0], {
+        controller: "MPL3115A2"
+      });
+      test.deepEqual(this.Multi.lastCall.args[0], {
+        controller: "HTU21D"
+      });
+
+      ownProps.forEach(own => {
+        test.ok(own in weather);
+      });
+
+      test.done();
+    },
+  },
+
+  period(test) {
+    test.expect(2);
+
+    const spy = this.sandbox.spy();
+    const weather = new Weather({
+      variant: "DEV-13956",
+      period: 1,
     });
 
     weather.on("data", spy);
@@ -211,12 +362,12 @@ exports["Weather"] = {
     test.done();
   },
 
-  data: function(test) {
+  data(test) {
     test.expect(1);
 
-    var spy = this.sandbox.spy();
-    var weather = new Weather({
-      variant: "ARDUINO",
+    const spy = this.sandbox.spy();
+    const weather = new Weather({
+      variant: "DEV-13956",
     });
 
     weather.on("data", spy);
@@ -228,25 +379,24 @@ exports["Weather"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(4);
 
-    var spy = this.sandbox.spy();
-    var weather = new Weather({
-      variant: "ARDUINO",
+    const spy = this.sandbox.spy();
+    const weather = new Weather({
+      variant: "DEV-13956",
       elevation: 1,
     });
 
     weather.on("change", spy);
-
     this.multis.MPL3115A2.emit("change");
-    this.multis.HTU21D.emit("change");
+    this.multis.SI7021.emit("change");
     this.light.emit("change");
 
     test.equal(spy.callCount, 3);
     test.deepEqual(spy.getCall(2).args[0], {
       celsius: 24,
-      fahrenheit: 75.2,
+      fahrenheit: 75,
       kelvin: 297.15,
       pressure: 125.5,
       feet: 3.28,
@@ -256,18 +406,18 @@ exports["Weather"] = {
     });
 
     // BOTH have to change, since they are averaged!!
-    this.multis.MPL3115A2.temperature.celsius = 0;
-    this.multis.HTU21D.temperature.celsius = 10;
-    this.multis.HTU21D.hygrometer.relativeHumidity = 0;
+    this.multis.MPL3115A2.thermometer.celsius = 0;
+    this.multis.SI7021.thermometer.celsius = 10;
+    this.multis.SI7021.hygrometer.relativeHumidity = 0;
 
     this.multis.MPL3115A2.emit("change");
-    this.multis.HTU21D.emit("change");
+    this.multis.SI7021.emit("change");
     this.light.emit("change");
 
     test.equal(spy.callCount, 6);
     test.deepEqual(spy.lastCall.args[0], {
       celsius: 5,
-      fahrenheit: 75.2,
+      fahrenheit: 75,
       kelvin: 297.15,
       pressure: 125.5,
       feet: 3.28,
@@ -279,14 +429,14 @@ exports["Weather"] = {
     test.done();
   },
 
-  toJSON: function(test) {
+  toJSON(test) {
     test.expect(1);
 
-    var weather = new Weather({
-      variant: "ARDUINO",
+    const weather = new Weather({
+      variant: "DEV-13956",
     });
 
-    var spy = this.sandbox.spy(weather, "toJSON");
+    const spy = this.sandbox.spy(weather, "toJSON");
 
     JSON.stringify(weather);
 
@@ -295,12 +445,12 @@ exports["Weather"] = {
     test.done();
   },
 
-  serialization: function(test) {
+  serialization(test) {
     test.expect(2);
 
-    var spy = this.sandbox.spy();
-    var weather = new Weather({
-      variant: "ARDUINO",
+    const spy = this.sandbox.spy();
+    const weather = new Weather({
+      variant: "DEV-13956",
     });
 
     weather.on("data", spy);

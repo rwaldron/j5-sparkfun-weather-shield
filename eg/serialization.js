@@ -1,3 +1,4 @@
+// Be sure to "npm install johnny-five"
 const five = require("johnny-five");
 /**
  *  const Weather = require("j5-sparkfun-weather-shield")(five);
@@ -7,7 +8,7 @@ const board = new five.Board();
 
 board.on("ready", () => {
   const weather = new Weather({
-    variant: "ARDUINO",
+    variant: "DEV-13956",
     freq: 200
   });
 
