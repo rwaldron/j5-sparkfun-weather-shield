@@ -1,6 +1,5 @@
 {
-  "loopfunc": true,
-  "laxcomma": true,
+  "esversion": 7,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
@@ -13,12 +12,10 @@
   "eqnull": true,
   "node": true,
   "strict": false,
-  "esnext": true,
+  "quotmark": "double",
   "unused": true,
   "globals": {
     "exports": true,
     "document": true,
-    "Promise": true,
-    "copy": true
   }
 }
