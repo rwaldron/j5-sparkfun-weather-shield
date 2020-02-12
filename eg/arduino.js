@@ -8,7 +8,7 @@ const board = new five.Board();
 board.on("ready", () => {
   const weather = new Weather({
     variant: "ARDUINO",
-    freq: 200,
+    period: 200,
   });
 
   weather.on("data", () => {

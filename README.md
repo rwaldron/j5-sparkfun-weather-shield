@@ -47,14 +47,14 @@ The `Weather` class constructs objects that represent the built-in components of
   ```js
   const weather = new Weather({
     variant: "ARDUINO",
-    freq: 200
+    period: 200
   });
 
   ...or...
 
   const weather = new Weather({
     variant: "PHOTON",
-    freq: 200
+    period: 200
   });
   ```
 
@@ -66,7 +66,7 @@ The `Weather` class constructs objects that represent the built-in components of
 |------------|-----------|---------------------------|---------|----------|
 | variant    | string    | ARDUINO, PHOTON           |         | yes      |
 | elevation  | number    | Meters, as reported from whatismyelevation.com (or similar)           |         | yes \*      |
-| freq       | number    | Milliseconds. The rate in milliseconds to emit the data event |    25ms     | no      |
+| period       | number    | Milliseconds. The rate in milliseconds to emit the data event |    25ms     | no      |
 
 
 \* If `elevation` is omitted, the value of the `feet` and `meters` properties will be `null`. When `elevation` is included, there is a 3 second calibration window before all values are reported.
@@ -84,7 +84,7 @@ const board = new five.Board();
 board.on("ready", () => {
   const weather = new Weather({
     variant: "ARDUINO",
-    freq: 200
+    period: 200
   });
 
   weather.on("data", () => {
@@ -118,7 +118,7 @@ const board = new five.Board();
 board.on("ready", () => {
   const weather = new Weather({
     variant: "ARDUINO",
-    freq: 200, 
+    period: 200, 
     // Input meters from whatismyelevation.com
     elevation: 12 
   });
@@ -170,7 +170,7 @@ const board = new five.Board({
 board.on("ready", function() {
   var weather = new Weather({
     variant: "PHOTON",
-    freq: 200
+    period: 200
   });
 
   weather.on("data", () => {
@@ -210,7 +210,7 @@ const board = new five.Board({
 board.on("ready", () => {
   const weather = new Weather({
     variant: "PHOTON",
-    freq: 200,
+    period: 200,
     // Input meters from whatismyelevation.com
     elevation: 12     
   });

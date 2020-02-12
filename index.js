@@ -26,7 +26,7 @@ module.exports = function(five) {
         variant = opts;
         opts = {
           variant: variant,
-          freq: 25,
+          period: 25,
         };
       }
 
@@ -59,7 +59,7 @@ module.exports = function(five) {
         return true;
       }
 
-      var freq = opts.freq || 25;
+      var period = opts.freq || opts.period || 25;
       var emit = this.emit.bind(this);
       var emitBoundData = function(event) {
         if (isCalibrated()) {
@@ -77,7 +77,7 @@ module.exports = function(five) {
 
       setInterval(function() {
         emitBoundData("data");
-      }, freq);
+      }, period);
 
       Object.defineProperties(this, {
         isCalibrated: {

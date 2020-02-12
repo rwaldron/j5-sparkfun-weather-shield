@@ -8,7 +8,7 @@ const board = new five.Board();
 board.on("ready", () => {
   const weather = new Weather({
     variant: "ARDUINO",
-    freq: 200,
+    period: 200,
     // Set your base elevation with a value in meters,
     // as reported by http://www.whatismyelevation.com/.
     // `5` is the elevation (meters) of the
