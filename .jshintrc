@@ -13,9 +13,5 @@
   "node": true,
   "strict": false,
   "quotmark": "double",
-  "unused": true,
-  "globals": {
-    "exports": true,
-    "document": true,
-  }
+  "unused": true
 }
