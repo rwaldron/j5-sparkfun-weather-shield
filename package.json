@@ -1,13 +1,22 @@
 {
   "name": "j5-sparkfun-weather-shield",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "SparkFun Weather Shield plugin for Johnny-Five",
   "main": "index.js",
   "scripts": {
     "test": "grunt"
   },
   "keywords": [
-    "Arduino", "Photon", "Tessel", "Edison", "I2C", "Weather", "SparkFun", "HTU21D", "MPL3115A2", "ALS-PT19"
+    "Arduino",
+    "Photon",
+    "Tessel",
+    "Edison",
+    "I2C",
+    "Weather",
+    "SparkFun",
+    "HTU21D",
+    "MPL3115A2",
+    "ALS-PT19"
   ],
   "author": "",
   "license": "MIT",
