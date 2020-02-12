@@ -6,23 +6,35 @@
 For use with [Johnny-Five](https://github.com/rwaldron/johnny-five).
 
 
-- [SparkFun Weather Shield](https://www.sparkfun.com/products/12081)
+- [SparkFun Weather Shield](https://www.sparkfun.com/products/12081) `DEV-12081`, `12081` (Retired)
   + Humidity/Temperature Sensor - HTU21D
   + Barometric Pressure - MPL3115A2
   + Light Sensor - ALS-PT19
-  ![](https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-01.jpg)
-  
-- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630)
+  ![](https://cdn.sparkfun.com//assets/parts/8/7/0/7/12081-04.jpg)
+
+- [SparkFun Weather Shield](https://www.sparkfun.com/products/13956) `DEV-13956`, `13956` (Current)
   + Humidity/Temperature Sensor - HTU21D
   + Barometric Pressure - MPL3115A2
-  ![](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-01a.jpg)
+  + Light Sensor - ALS-PT19
+  ![](https://cdn.sparkfun.com//assets/parts/1/1/6/6/5/13956-04.jpg)
+  
+- [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13674) `DEV-13674`, `13674` (Current)
+  + Humidity/Temperature Sensor - HTU21D
+  + Barometric Pressure - MPL3115A2
+  ![](https://cdn.sparkfun.com//assets/parts/1/1/1/2/1/13674-05.jpg)
 
 ## API & Documentation
 
-Install with: 
+For use with Particle Photon: 
 
 ```
 npm install johnny-five particle-io j5-sparkfun-weather-shield
+```
+
+For use with Arduino: 
+
+```
+npm install johnny-five j5-sparkfun-weather-shield
 ```
 
 
