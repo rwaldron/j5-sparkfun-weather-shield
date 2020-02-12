@@ -32,27 +32,27 @@ The `Weather` class constructs objects that represent the built-in components of
 
 - Explicit Initialization, defaults "data" to 25ms intervals
   ```js
-  var weather = new Weather({
+  const weather = new Weather({
     variant: "ARDUINO",
   });
 
   ...or...
   
-  var weather = new Weather({
+  const weather = new Weather({
     variant: "PHOTON",
   });
   ```
 
 - Explicit Initialization, specify "data" to 200ms intervals
   ```js
-  var weather = new Weather({
+  const weather = new Weather({
     variant: "ARDUINO",
     freq: 200
   });
 
   ...or...
 
-  var weather = new Weather({
+  const weather = new Weather({
     variant: "PHOTON",
     freq: 200
   });
@@ -77,23 +77,32 @@ The `Weather` class constructs objects that represent the built-in components of
 (Without a specified `elevation`)
 
 ```js
-var five = require("johnny-five");
-var Weather = require("j5-sparkfun-weather-shield")(five);
-var board = new five.Board();
+const five = require("johnny-five");
+const Weather = require("j5-sparkfun-weather-shield")(five);
+const board = new five.Board();
 
-board.on("ready", function() {
-  var weather = new Weather({
+board.on("ready", () => {
+  const weather = new Weather({
     variant: "ARDUINO",
     freq: 200
   });
 
-  weather.on("data", function() {
-    console.log("celsius: %d°C", this.celsius);
-    console.log("fahrenheit: %d°F", this.fahrenheit);
-    console.log("kelvin: %d°K", this.kelvin);
-    console.log("pressure: %d kPa", this.pressure);
-    console.log("relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("lightLevel: %d%", this.lightLevel);
+  weather.on("data", () => {
+    const {
+      celsius,
+      fahrenheit,
+      kelvin,
+      pressure,
+      relativeHumidity,
+      lightLevel
+    } = weather;
+
+    console.log("celsius: %d°C", celsius);
+    console.log("fahrenheit: %d°F", fahrenheit);
+    console.log("kelvin: %d°K", kelvin);
+    console.log("pressure: %d kPa", pressure);
+    console.log("relativeHumidity: %d RH", relativeHumidity);
+    console.log("lightLevel: %d%", lightLevel);
     console.log("----------------------------------------");
   });
 });
@@ -102,27 +111,40 @@ board.on("ready", function() {
 (With a specified `elevation`)
 
 ```js
-var five = require("johnny-five");
-var Weather = require("j5-sparkfun-weather-shield")(five);
-var board = new five.Board();
+const five = require("johnny-five");
+const Weather = require("j5-sparkfun-weather-shield")(five);
+const board = new five.Board();
 
-board.on("ready", function() {
-  var weather = new Weather({
+board.on("ready", () => {
+  const weather = new Weather({
     variant: "ARDUINO",
     freq: 200, 
     // Input meters from whatismyelevation.com
     elevation: 12 
   });
 
-  weather.on("data", function() {
-    console.log("celsius: %d°C", this.celsius);
-    console.log("fahrenheit: %d°F", this.fahrenheit);
-    console.log("kelvin: %d°K", this.kelvin);
-    console.log("pressure: %d kPa", this.pressure);
-    console.log("feet: %d\"", this.feet);
-    console.log("meters: %d", this.meters);
-    console.log("relativeHumidity: %d RH", this.relativeHumidity);
-    console.log("lightLevel: %d%", this.lightLevel);
+  // Including elevation for altitude readings will
+  // incure an additional 3 second calibration time.
+  weather.on("data", () => {
+    const {
+      celsius,
+      fahrenheit,
+      kelvin,
+      pressure,
+      feet,
+      meters,
+      relativeHumidity,
+      lightLevel
+    } = weather;
+
+    console.log("celsius: %d°C", celsius);
+    console.log("fahrenheit: %d°F", fahrenheit);
+    console.log("kelvin: %d°K", kelvin);
+    console.log("pressure: %d kPa", pressure);
+    console.log("feet: %d'", feet);
+    console.log("meters: %d", meters);
+    console.log("relativeHumidity: %d RH", relativeHumidity);
+    console.log("lightLevel: %d%", lightLevel);
     console.log("----------------------------------------");
   });
 });
@@ -135,13 +157,13 @@ board.on("ready", function() {
 (Without a specified `elevation`)
 
 ```js
-var Particle = require("particle-io");
-var five = require("johnny-five");
-var Weather = require("j5-sparkfun-weather-shield")(five);
-var board = new five.Board({
+const Particle = require("particle-io");
+const five = require("johnny-five");
+const Weather = require("j5-sparkfun-weather-shield")(five);
+const board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_DEVICE
+    deviceId: process.env.PARTICLE_PHOTON_1
   })
 });
 
@@ -151,12 +173,22 @@ board.on("ready", function() {
     freq: 200
   });
 
-  weather.on("data", function() {
-    console.log("celsius: %d°C", this.celsius);
-    console.log("fahrenheit: %d°F", this.fahrenheit);
-    console.log("kelvin: %d°K", this.kelvin);
-    console.log("pressure: %d kPa", this.pressure);
-    console.log("relativeHumidity: %d RH", this.relativeHumidity);
+  weather.on("data", () => {
+    const {
+      celsius,
+      fahrenheit,
+      kelvin,
+      pressure,
+      relativeHumidity,
+      lightLevel
+    } = weather;
+
+    console.log("celsius: %d°C", celsius);
+    console.log("fahrenheit: %d°F", fahrenheit);
+    console.log("kelvin: %d°K", kelvin);
+    console.log("pressure: %d kPa", pressure);
+    console.log("relativeHumidity: %d RH", relativeHumidity);
+    console.log("lightLevel: %d%", lightLevel);
     console.log("----------------------------------------");
   });
 });
@@ -165,47 +197,61 @@ board.on("ready", function() {
 (With a specified `elevation`)
 
 ```js
-var Particle = require("particle-io");
-var five = require("johnny-five");
-var Weather = require("j5-sparkfun-weather-shield")(five);
-var board = new five.Board({
+const Particle = require("particle-io");
+const five = require("johnny-five");
+const Weather = require("j5-sparkfun-weather-shield")(five);
+const board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_DEVICE
+    deviceId: process.env.PARTICLE_PHOTON_1
   })
 });
 
-board.on("ready", function() {
-  var weather = new Weather({
+board.on("ready", () => {
+  const weather = new Weather({
     variant: "PHOTON",
     freq: 200,
     // Input meters from whatismyelevation.com
     elevation: 12     
   });
 
-  weather.on("data", function() {
-    console.log("celsius: %d°C", this.celsius);
-    console.log("fahrenheit: %d°F", this.fahrenheit);
-    console.log("kelvin: %d°K", this.kelvin);
-    console.log("pressure: %d kPa", this.pressure);
-    console.log("feet: %d\"", this.feet);
-    console.log("meters: %d", this.meters);
-    console.log("relativeHumidity: %d RH", this.relativeHumidity);
+  // Including elevation for altitude readings will
+  // incure an additional 3 second calibration time.
+  weather.on("data", () => {
+    const {
+      celsius,
+      fahrenheit,
+      kelvin,
+      pressure,
+      feet,
+      meters,
+      relativeHumidity,
+      lightLevel
+    } = weather;
+
+    console.log("celsius: %d°C", celsius);
+    console.log("fahrenheit: %d°F", fahrenheit);
+    console.log("kelvin: %d°K", kelvin);
+    console.log("pressure: %d kPa", pressure);
+    console.log("feet: %d'", feet);
+    console.log("meters: %d", meters);
+    console.log("relativeHumidity: %d RH", relativeHumidity);
+    console.log("lightLevel: %d%", lightLevel);
     console.log("----------------------------------------");
   });
 });
 ```
 
 
-#### Convenient serialization for data tracking: 
+#### Convenient serialization for data payloads: 
 
 ```js
-var weather = new Weather({
+const weather = new Weather({
   variant: ...
 });
 
-weather.on("data", function() {
-  console.log(JSON.stringify(this, null, 2));
+weather.on("data", () => {
+  console.log(JSON.stringify(weather, null, 2));
 });
 ```
 
@@ -229,4 +275,4 @@ Produces:
 
 ## NOTE
 
-The examples shown here are provided for illustration and do no specifically indicate variant  support. This component class is expected to work with any variant  that has I2C support. 
+The examples shown here are provided for illustration and do no specifically indicate variant  support. This component class is expected to work with any variant that has I2C support. 
