@@ -81,11 +81,11 @@ The `Weather` class constructs objects that represent the built-in components of
 
 | Property   | Type      | Value(s)/Description      | Default | Required | Version |
 |------------|-----------|---------------------------|---------|----------|---------------|
-| variant    | string    | `"ARDUINO"`, `"PHOTON"`   | no      | yes      | v0.1.0-v1.0.0 |
-| variant    | string or number   | See [Variants](#variants) | no      | yes      | v2.0.0+       |
-| elevation  | number    | Base elevation in meters (You can use [whatismyelevation.com](http://whatismyelevation.com) to find out the base elevation for your location) |         | yes \*      | yes      | all      |
-| freq       | number    | Milliseconds. The rate in milliseconds to emit the data event |    `25` (ms)     | no      | v0.1.0-v1.0.0      |
-| period | number    | Milliseconds. The rate in milliseconds to emit the data event |    `25` (ms)     | no      | v2.0.0+      |
+| `variant`    | string    | `"ARDUINO"`, `"PHOTON"`   | no      | yes      | v0.1.0-v1.0.0 |
+| `variant`    | string or number   | See [Variants](#variants) | no      | yes      | v2.0.0+       |
+| `elevation`  | number    | Base elevation in meters (You can use [whatismyelevation.com](http://whatismyelevation.com) to find out the base elevation for your location) |         | yes \*      | yes      | all      |
+| ~~`freq`~~       | number    | Use `period` |    `25` (ms)     | no      | v0.1.0-v1.0.0      |
+| `period` | number    | Milliseconds. The rate in milliseconds to emit the data event |    `25` (ms)     | no      | v2.0.0+      |
 
 
 \* If `elevation` is omitted, the value of the `feet` and `meters` properties will be `null`. When `elevation` is included, there is a 3 second calibration window before all values are reported.
