@@ -178,7 +178,7 @@ const Weather = require("j5-sparkfun-weather-shield")(five);
 const board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_1
+    deviceId: process.env.PARTICLE_PHOTON_DEVICE_ID
   })
 });
 
@@ -218,7 +218,7 @@ const Weather = require("j5-sparkfun-weather-shield")(five);
 const board = new five.Board({
   io: new Particle({
     token: process.env.PARTICLE_TOKEN,
-    deviceId: process.env.PARTICLE_PHOTON_1
+    deviceId: process.env.PARTICLE_PHOTON_DEVICE_ID
   })
 });
 
