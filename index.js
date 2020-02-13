@@ -178,11 +178,26 @@ module.exports = function(five) {
         toJSON: {
           configurable: true,
           value() {
-            const data = Object.assign({}, this);
-            delete data._events;
-            delete data._eventsCount;
-            delete data._maxListeners;
-            return data;
+            const {
+              celsius,
+              fahrenheit,
+              kelvin,
+              pressure,
+              feet,
+              meters,
+              relativeHumidity,
+              lightLevel
+            } = this;
+            return {
+              celsius,
+              fahrenheit,
+              kelvin,
+              pressure,
+              feet,
+              meters,
+              relativeHumidity,
+              lightLevel
+            };
           }
         }
       });
