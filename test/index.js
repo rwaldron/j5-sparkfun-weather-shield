@@ -2,6 +2,9 @@ global.IS_TEST_MODE = true;
 const sinon = require("sinon");
 const Emitter = require("events");
 const five = {
+  Fn: {
+    toFixed: (number, digits) => +(number || 0).toFixed(digits)
+  },
   Multi: function() {},
   Light: function() {},
 };
@@ -462,4 +465,21 @@ exports["Weather"] = {
 
     test.done();
   },
+
+  ...(() => {
+    return Object.entries(Weather.VARIANTS)
+      .reduce((accum, [variant, sensors]) => {
+        return Object.assign(accum, {
+          [`DEV-${variant}: sensors.*`](test) {
+            test.expect(2);
+            const weather = new Weather({
+              variant
+            });
+            test.equal("sensors" in weather, true);
+            test.deepEqual(Object.keys(weather.sensors).filter(Boolean), sensors);
+            test.done();
+          },
+        });
+      }, {});
+  })()
 };

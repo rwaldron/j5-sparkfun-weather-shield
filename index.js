@@ -19,11 +19,10 @@ const variants = {
 
 const normalizeVariant = input => typeof input === "number" ?
   input : parseInt(input.replace(/\D+/g, ""), 10);
-const average = values => (values.reduce((a, b) => a + b) / values.length);
 const enumerable = true;
 
 module.exports = function(five) {
-
+  const average = v => five.Fn.toFixed(v.reduce((a, b) => a + b) / v.length, 2);
   class Weather extends Emitter {
     constructor(options) {
       super();
@@ -73,26 +72,26 @@ module.exports = function(five) {
       } : {};
       const period = options.freq || options.period || 25;
 
-      const A = barometer ?
+      const B = barometer ?
         new five.Multi(
           Object.assign({
             controller: barometer
           }, elevation)
         ) : null;
 
-      const B = thermometer ?
+      const T = thermometer ?
         new five.Multi({
           controller: thermometer
         }) : null;
 
-      const C = luxometer ?
+      const L = luxometer ?
         new five.Light({
           controller: luxometer,
           pin: "A1",
         }) : null;
 
       const isCalibrated = () => {
-        if (!Number(A.barometer.pressure)) {
+        if (!Number(B.barometer.pressure)) {
           return false;
         }
         return true;
@@ -104,7 +103,7 @@ module.exports = function(five) {
         }
       };
 
-      [A, B, C].forEach(sensor => {
+      [B, T, L].forEach(sensor => {
         if (sensor) {
           sensor.on("change", () => emitBoundData("change"));
         }
@@ -118,61 +117,72 @@ module.exports = function(five) {
             return isCalibrated();
           }
         },
+        sensors: {
+          get() {
+            return {
+              [barometer]: B,
+              [thermometer]: T,
+              ...(luxometer ? {
+                [luxometer]: L
+              } : {})
+            };
+          }
+        },
         celsius: {
           enumerable,
           get() {
             return average([
-              A.thermometer.celsius,
-              B.thermometer.celsius
-            ]) >>> 0;
+              B.thermometer.celsius,
+              T.thermometer.celsius
+            ]);
           }
         },
         fahrenheit: {
           enumerable,
           get() {
             return average([
-              A.thermometer.fahrenheit,
-              B.thermometer.fahrenheit
-            ]) >>> 0;
+              B.thermometer.fahrenheit,
+              T.thermometer.fahrenheit
+            ]);
           }
         },
         kelvin: {
           enumerable,
           get() {
             return average([
-              A.thermometer.kelvin,
-              B.thermometer.kelvin
+              B.thermometer.kelvin,
+              T.thermometer.kelvin
             ]);
           }
         },
         pressure: {
           enumerable,
           get() {
-            return A.barometer.pressure;
+            return B.barometer.pressure;
           }
         },
         feet: {
           enumerable,
           get() {
-            return hasElevation ? A.altimeter.feet : null;
+            return hasElevation ? B.altimeter.feet : null;
           }
         },
         meters: {
           enumerable,
           get() {
-            return hasElevation ? A.altimeter.meters : null;
+            return hasElevation ? B.altimeter.meters : null;
           }
         },
         relativeHumidity: {
           enumerable,
           get() {
-            return B.hygrometer.relativeHumidity;
+            return T.hygrometer.relativeHumidity;
           }
         },
         lightLevel: {
           enumerable,
           get() {
-            return C ? C.level : null;
+            return L ? L.level : null;
           }
         },
         toJSON: {
@@ -206,6 +216,13 @@ module.exports = function(five) {
 
   if (global.IS_TEST_MODE) {
     Weather.normalizeVariant = normalizeVariant;
+    Weather.SENSORS = {
+      ALSPT19,
+      HTU21D,
+      MPL3115A2,
+      SI7021,
+    };
+    Weather.VARIANTS = variants;
   }
 
   return Weather;
